@@ -1,0 +1,14 @@
+{% for peer in ffrl_peers %}
+
+auto {{ peer.name }}
+iface {{ peer.name }} inet static
+  address {{ peer.own_transport_ipv4 }}
+  netmask 255.255.255.254
+  pre-up ip tunnel add $IFACE mode gre local {{ peer.local_ipv4 }} remote {{ peer.remote_ipv4 }} ttl 255
+  post-up ip link set $IFACE mtu 1400
+  post-down ip tunnel del $IFACE
+
+iface {{ peer.name }} inet6 static
+  address {{ peer.own_transport_ipv6 }}
+  netmask 64
+{% endfor %}

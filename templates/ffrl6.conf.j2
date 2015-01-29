@@ -1,0 +1,46 @@
+table ffrl;
+
+function is_default() {
+  return net ~ [ ::0/0 ];
+}
+
+# synchronize default route
+# from bird ffrl table to kernel routing table nr. X
+# nothing in the other direction
+protocol kernel kernel_ffrl {
+    scan time 10;
+
+    table ffrl;
+    kernel table {{ ffrl_kernel_table }};
+    import none;
+    export where is_default();
+};
+
+protocol direct {
+  interface "{{ ffrl_peers|map(attribute='name')|join('", "') }}";
+  table ffrl;
+}
+
+protocol static uplink_hostroute {
+  table ffrl;
+  route {{ ffrl_ipv6_net }} reject;
+}
+
+template bgp uplink {
+  table ffrl;
+  local as {{ ffrl_ownas }};
+  import where is_default();
+  export none;
+  export where proto = "uplink_hostroute";
+  next hop self;
+  multihop 64;
+}
+{% for peer in ffrl_peers %}
+
+protocol bgp {{ peer.name }} from uplink {
+  source address {{ peer.own_transport_ipv6 }};
+  neighbor {{ peer.peer_transport_ipv6 }} as {{ ffrl_as }};
+  password "{{ peer.bgp_password }}";
+  default bgp_local_pref {{ peer.bgp_local_pref }};
+}
+{% endfor %}

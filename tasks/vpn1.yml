@@ -6,3 +6,6 @@
   with_items: vpn1_peers
   register: ifup_result
   changed_when: "'already configured' in ifup_result.stdout"
+
+- name: enable routing for vpn1-traffic
+  script: files/setup-vpn1-routing.sh

@@ -15,6 +15,8 @@
 - name: ensure /etc/network/interfaces.d exists
   file: dest=/etc/network/interfaces.d state=directory owner=root group=root
 
+- include: vpn1.yml
+
 - name: add GRE tunnel configuration
   template: src=ffrl-gre-tunnels.j2 dest='/etc/network/interfaces.d/ffrl-tunnels' owner=root group=root mode='0644'
 

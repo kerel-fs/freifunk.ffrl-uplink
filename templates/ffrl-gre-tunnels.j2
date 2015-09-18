@@ -8,7 +8,9 @@ iface {{ peer.name }} inet static
   post-up ip link set $IFACE mtu 1400
   post-down ip tunnel del $IFACE
 
+{% if peer.own_transport_ipv6 %}
 iface {{ peer.name }} inet6 static
   address {{ peer.own_transport_ipv6 }}
   netmask 64
+{% endif %}
 {% endfor %}

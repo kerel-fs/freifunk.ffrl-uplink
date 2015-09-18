@@ -1,0 +1,4 @@
+{% for peer in ffrl_peers %}
+-A FORWARD -s {{ ffrl_ipv4_net }} -i vpn1 -o {{ peer.name }} -j ACCEPT
+-A FORWARD -d {{ ffrl_ipv4_net }} -i {{ peer.name }} -o vpn1 -j ACCEPT
+

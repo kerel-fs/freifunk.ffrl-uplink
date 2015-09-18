@@ -1,0 +1,8 @@
+- name: add GRE tunnel configuration for vpn1
+  template: src=ffrl-gre-tunnels.j2 dest='/etc/network/interfaces.d/vpn1-tunnels' owner=root group=root mode='0644'
+
+- name: enable tunnel for vpn1
+  command: /sbin/ifup {{ item.name }}
+  with_items: vpn1_peers
+  register: ifup_result
+  changed_when: "'already configured' in ifup_result.stdout"

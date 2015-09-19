@@ -1,9 +1,26 @@
-Freifunk Rheinland Uplink
-=========================
+Freifunk Rheinland Uplink - vpn1-Uplink
+=======================================
+
+This branch is NOT executable! It introduces some untested and incomplete scripts,
+granting ffrl-uplink via gre-tunnel for vpn1.
+
+vpn1-uplink
+-----------
+
+1. GRE-Tunnel aufbauen (siehe tasks/vpn1.yml)
+
+2. Firwall auf fastd6 konfigurieren (siehe templates/vpn1-iptables-rules.v4)
+
+3. via BGP unser Netz announcen/default-Route in kernel-table:ffrl schreiben
+   (entspricht auch dem bisherigen Setup)
+
+4. policy-Routing konfigurieren (siehe files/setup-vpn1-routing.sh)
+
 
 A role to connect a server to the Freifunk Rheinland Backbone.
 You find further information at [Freifunk Hamburg IPv4-Uplink](http://wiki.freifunk.net/Freifunk_Hamburg/IPv4Uplink)
 and [Freifunk KBU](https://kbu.freifunk.net/wiki/index.php?title=FFRL-Uplink).
+
 
 Requirements
 ------------
